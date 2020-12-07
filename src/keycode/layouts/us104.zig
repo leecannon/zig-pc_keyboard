@@ -47,7 +47,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
             if (modifiers.is_shifted()) return DecodedKey{ .Unicode = "+" } else return DecodedKey{ .Unicode = "=" };
         },
         .Backspace => return DecodedKey{ .Unicode = "\x08" },
-        .Tab => return DecodedKey{ .Unicode = "\x09" },
+        .Tab => return DecodedKey{ .Unicode = "\t" },
         .Q => {
             if (map_to_unicode and modifiers.is_ctrl()) return DecodedKey{ .Unicode = "\u{0011}" } else if (modifiers.is_caps()) return DecodedKey{ .Unicode = "Q" } else return DecodedKey{ .Unicode = "q" };
         },
