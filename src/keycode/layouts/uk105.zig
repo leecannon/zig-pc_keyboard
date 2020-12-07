@@ -56,3 +56,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         else => return us104.map_keycode(keycode, modifiers, handle_ctrl),
     }
 }
+
+test "" {
+    @import("std").testing.refAllDecls(@This());
+}

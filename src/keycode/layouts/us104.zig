@@ -121,7 +121,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
             if (modifiers.is_shifted()) return DecodedKey{ .Unicode = "\"" } else return DecodedKey{ .Unicode = "'" };
         },
         // Enter gives LF, not CRLF or CR
-        .Enter => return DecodedKey{ .Unicode = "\x10" },
+        .Enter => return DecodedKey{ .Unicode = "\n" },
         .Z => {
             if (map_to_unicode and modifiers.is_ctrl()) return DecodedKey{ .Unicode = "\u{001A}" } else if (modifiers.is_caps()) return DecodedKey{ .Unicode = "Z" } else return DecodedKey{ .Unicode = "z" };
         },
@@ -153,7 +153,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
             if (modifiers.is_shifted()) return DecodedKey{ .Unicode = "?" } else return DecodedKey{ .Unicode = "/" };
         },
         .Spacebar => return DecodedKey{ .Unicode = " " },
-        .Delete => return DecodedKey{ .Unicode = "\x127" },
+        .Delete => return DecodedKey{ .Unicode = "\x7F" },
         .NumpadSlash => return DecodedKey{ .Unicode = "/" },
         .NumpadStar => return DecodedKey{ .Unicode = "*" },
         .NumpadMinus => return DecodedKey{ .Unicode = "-" },
@@ -181,12 +181,19 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
             if (modifiers.numlock) return DecodedKey{ .Unicode = "2" } else return DecodedKey{ .RawKey = .ArrowDown };
         },
         .Numpad3 => {
-            if (modifiers.numlock) return DecodedKey{ .Unicode = "3" } else return DecodedKey{ .RawKey = .Insert };
+            if (modifiers.numlock) return DecodedKey{ .Unicode = "3" } else return DecodedKey{ .RawKey = .PageDown };
+        },
+        .Numpad0 => {
+            if (modifiers.numlock) return DecodedKey{ .Unicode = "0" } else return DecodedKey{ .RawKey = .Insert };
         },
         .NumpadPeriod => {
-            if (modifiers.numlock) return DecodedKey{ .Unicode = "." } else return DecodedKey{ .Unicode = "\x127" };
+            if (modifiers.numlock) return DecodedKey{ .Unicode = "." } else return DecodedKey{ .Unicode = "\x7F" };
         },
-        .NumpadEnter => return DecodedKey{ .Unicode = "\x10" },
+        .NumpadEnter => return DecodedKey{ .Unicode = "\n" },
         else => return DecodedKey{ .RawKey = keycode },
     }
+}
+
+test "" {
+    @import("std").testing.refAllDecls(@This());
 }

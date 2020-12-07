@@ -167,3 +167,7 @@ fn map_extended_scancode(code: u8) KeyboardError!KeyCode {
         else => KeyboardError.UnknownKeyCode,
     };
 }
+
+test "" {
+    @import("std").testing.refAllDecls(@This());
+}

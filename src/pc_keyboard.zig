@@ -10,9 +10,15 @@ pub const KeyboardError = error{
 pub const KeyboardLayout = enum {
     Uk105Key,
     Us104Key,
+    Jis109Key,
+    AzertyKey,
+    Dvorak104Key,
 };
 const Uk105KeyImpl = @import("keycode/layouts/uk105.zig");
 const Us104KeyImpl = @import("keycode/layouts/us104.zig");
+const Jis109KeyImpl = @import("keycode/layouts/jis109.zig");
+const AzertyKeyImpl = @import("keycode/layouts/azerty.zig");
+const Dvorak104KeyImpl = @import("keycode/layouts/dvorak104.zig");
 
 pub const ScancodeSet = enum {
     ScancodeSet1,
@@ -127,6 +133,9 @@ pub const Keyboard = struct {
                         return switch (self.keyboardLayout) {
                             .Uk105Key => Uk105KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
                             .Us104Key => Us104KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .Jis109Key => Jis109KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .AzertyKey => AzertyKeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .Dvorak104Key => Dvorak104KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
                         };
                     },
                 }
