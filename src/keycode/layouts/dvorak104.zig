@@ -5,39 +5,39 @@ usingnamespace @import("../../pc_keyboard.zig");
 
 const us104 = @import("us104.zig");
 
-pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
+pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
     const map_to_unicode = handle_ctrl == .MapLettersToUnicode;
     switch (keycode) {
         .Minus => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "{" };
             } else {
                 return .{ .Unicode = "[" };
             }
         },
         .Equals => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "}" };
             } else {
                 return .{ .Unicode = "]" };
             }
         },
         .Q => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "\"" };
             } else {
                 return .{ .Unicode = "'" };
             }
         },
         .W => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "<" };
             } else {
                 return .{ .Unicode = "," };
             }
         },
         .E => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = ">" };
             } else {
                 return .{ .Unicode = "." };
@@ -46,7 +46,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .R => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0010}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "P" };
             } else {
                 return DecodedKey{ .Unicode = "p" };
@@ -55,7 +55,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .T => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0019}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "Y" };
             } else {
                 return DecodedKey{ .Unicode = "y" };
@@ -64,7 +64,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .Y => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0006}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "F" };
             } else {
                 return DecodedKey{ .Unicode = "f" };
@@ -73,7 +73,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .U => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0007}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "G" };
             } else {
                 return DecodedKey{ .Unicode = "g" };
@@ -82,7 +82,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .I => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0003}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "C" };
             } else {
                 return DecodedKey{ .Unicode = "c" };
@@ -91,7 +91,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .O => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0012}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "R" };
             } else {
                 return DecodedKey{ .Unicode = "r" };
@@ -100,21 +100,21 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .P => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{000C}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "L" };
             } else {
                 return DecodedKey{ .Unicode = "l" };
             }
         },
         .BracketSquareLeft => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "?" };
             } else {
                 return .{ .Unicode = "/" };
             }
         },
         .BracketSquareRight => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "+" };
             } else {
                 return .{ .Unicode = "=" };
@@ -123,7 +123,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .S => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{000F}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "O" };
             } else {
                 return DecodedKey{ .Unicode = "o" };
@@ -132,7 +132,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .D => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0005}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "E" };
             } else {
                 return DecodedKey{ .Unicode = "e" };
@@ -141,7 +141,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .F => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0015}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "U" };
             } else {
                 return DecodedKey{ .Unicode = "u" };
@@ -150,7 +150,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .G => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0009}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "I" };
             } else {
                 return DecodedKey{ .Unicode = "i" };
@@ -159,7 +159,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .H => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0004}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "D" };
             } else {
                 return DecodedKey{ .Unicode = "d" };
@@ -168,7 +168,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .J => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0008}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "H" };
             } else {
                 return DecodedKey{ .Unicode = "h" };
@@ -177,7 +177,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .K => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0014}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "T" };
             } else {
                 return DecodedKey{ .Unicode = "t" };
@@ -186,7 +186,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .L => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{000E}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "N" };
             } else {
                 return DecodedKey{ .Unicode = "n" };
@@ -195,21 +195,21 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .SemiColon => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0013}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "S" };
             } else {
                 return DecodedKey{ .Unicode = "s" };
             }
         },
         .Quote => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "_" };
             } else {
                 return .{ .Unicode = "-" };
             }
         },
         .Z => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = ":" };
             } else {
                 return .{ .Unicode = ";" };
@@ -218,7 +218,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .X => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0011}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "Q" };
             } else {
                 return DecodedKey{ .Unicode = "q" };
@@ -227,7 +227,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .C => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{000A}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "J" };
             } else {
                 return DecodedKey{ .Unicode = "j" };
@@ -236,7 +236,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .V => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{000B}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "K" };
             } else {
                 return DecodedKey{ .Unicode = "k" };
@@ -245,7 +245,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .B => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0018}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "X" };
             } else {
                 return DecodedKey{ .Unicode = "x" };
@@ -254,7 +254,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .N => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0002}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "B" };
             } else {
                 return DecodedKey{ .Unicode = "b" };
@@ -263,7 +263,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .Comma => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0017}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "W" };
             } else {
                 return DecodedKey{ .Unicode = "w" };
@@ -272,7 +272,7 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .Fullstop => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{0016}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "V" };
             } else {
                 return DecodedKey{ .Unicode = "v" };
@@ -281,13 +281,13 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         .Slash => {
             if (map_to_unicode and modifiers.is_ctrl()) {
                 return DecodedKey{ .Unicode = "\u{001A}" };
-            } else if (modifiers.is_caps()) {
+            } else if (modifiers.isCaps()) {
                 return DecodedKey{ .Unicode = "Z" };
             } else {
                 return DecodedKey{ .Unicode = "z" };
             }
         },
-        else => return us104.map_keycode(keycode, modifiers, handle_ctrl),
+        else => return us104.mapKeycode(keycode, modifiers, handle_ctrl),
     }
 }
 

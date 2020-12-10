@@ -33,25 +33,25 @@ pub const Keyboard = struct {
     decode_state: DecodeState = .Start,
     handle_ctrl: HandleControl,
     modifiers: Modifiers = .{},
-    scancodeSet: ScancodeSet,
-    keyboardLayout: KeyboardLayout,
+    scancode_set: ScancodeSet,
+    keyboard_layout: KeyboardLayout,
 
     /// Make a new Keyboard object with the given layout.
-    pub fn init(scancodeSet: ScancodeSet, keyboardLayout: KeyboardLayout, handle_ctrl: HandleControl) Keyboard {
+    pub fn init(scancode_set: ScancodeSet, keyboard_layout: KeyboardLayout, handle_ctrl: HandleControl) Keyboard {
         return .{
             .handle_ctrl = handle_ctrl,
-            .scancodeSet = scancodeSet,
-            .keyboardLayout = keyboardLayout,
+            .scancode_set = scancode_set,
+            .keyboard_layout = keyboard_layout,
         };
     }
 
     /// Change the Ctrl key mapping.
-    pub fn set_ctrl_handling(self: *Keyboard, new_value: HandleControl) void {
+    pub fn setCtrlHandling(self: *Keyboard, new_value: HandleControl) void {
         self.handle_ctrl = new_value;
     }
 
     /// Get the current Ctrl key mapping.
-    pub fn get_ctrl_handling(self: *Keyboard) HandleControl {
+    pub fn getCtrlHandling(self: *Keyboard) HandleControl {
         return self.handle_ctrl;
     }
 
@@ -71,17 +71,17 @@ pub const Keyboard = struct {
     ///   MSB in bit 8.
     /// * The parity bit must be in bit 9.
     /// * The stop bit (1) must be in bit 10.
-    pub fn add_word(self: *Keyboard, word: u16) KeyboardError!?KeyEvent {
-        return self.add_byte(try check_word(word));
+    pub fn addWord(self: *Keyboard, word: u16) KeyboardError!?KeyEvent {
+        return self.addByte(try checkWord(word));
     }
 
     /// Processes an 8-bit byte from the keyboard.
     ///
     /// We assume the start, stop and parity bits have been processed and verified.
-    pub fn add_byte(self: *Keyboard, byte: u8) KeyboardError!?KeyEvent {
-        return switch (self.scancodeSet) {
-            .ScancodeSet1 => ScancodeSet1Impl.advance_state(&self.decode_state, byte),
-            .ScancodeSet2 => ScancodeSet2Impl.advance_state(&self.decode_state, byte),
+    pub fn addByte(self: *Keyboard, byte: u8) KeyboardError!?KeyEvent {
+        return switch (self.scancode_set) {
+            .ScancodeSet1 => ScancodeSet1Impl.advanceState(&self.decode_state, byte),
+            .ScancodeSet2 => ScancodeSet2Impl.advanceState(&self.decode_state, byte),
         };
     }
 
@@ -89,14 +89,14 @@ pub const Keyboard = struct {
     ///
     /// Call this /or/ call `add_word` - don't call both.
     /// Until the last bit is added you get null returned.
-    pub fn add_bit(self: *Keyboard, bit: u1) KeyboardError!?KeyEvent {
+    pub fn addBit(self: *Keyboard, bit: u1) KeyboardError!?KeyEvent {
         self.register |= @as(u16, bit) << self.num_bits;
         self.num_bits += 1;
         if (self.num_bits == KEYCODE_BITS) {
             const word = self.register;
             self.register = 0;
             self.num_bits = 0;
-            return self.add_word(word);
+            return self.addWord(word);
         } else {
             return null;
         }
@@ -108,7 +108,7 @@ pub const Keyboard = struct {
     /// For example, the KeyEvent for pressing the '5' key on your keyboard
     /// gives a DecodedKey of unicode character '5', unless the shift key is
     /// held in which case you get the unicode character '%'.
-    pub fn process_keyevent(self: *Keyboard, ev: KeyEvent) ?DecodedKey {
+    pub fn processKeyevent(self: *Keyboard, ev: KeyEvent) ?DecodedKey {
         switch (ev.state) {
             .Up => {
                 switch (ev.code) {
@@ -130,12 +130,12 @@ pub const Keyboard = struct {
                     .CapsLock => self.modifiers.capslock = !self.modifiers.capslock,
                     .NumpadLock => self.modifiers.numlock = !self.modifiers.numlock,
                     else => {
-                        return switch (self.keyboardLayout) {
-                            .Uk105Key => Uk105KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
-                            .Us104Key => Us104KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
-                            .Jis109Key => Jis109KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
-                            .AzertyKey => AzertyKeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
-                            .Dvorak104Key => Dvorak104KeyImpl.map_keycode(ev.code, self.modifiers, self.handle_ctrl),
+                        return switch (self.keyboard_layout) {
+                            .Uk105Key => Uk105KeyImpl.mapKeycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .Us104Key => Us104KeyImpl.mapKeycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .Jis109Key => Jis109KeyImpl.mapKeycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .AzertyKey => AzertyKeyImpl.mapKeycode(ev.code, self.modifiers, self.handle_ctrl),
+                            .Dvorak104Key => Dvorak104KeyImpl.mapKeycode(ev.code, self.modifiers, self.handle_ctrl),
                         };
                     },
                 }
@@ -145,23 +145,23 @@ pub const Keyboard = struct {
         return null;
     }
 
-    fn get_bit(word: u16, offset: u4) bool {
+    fn getBit(word: u16, offset: u4) bool {
         return ((word >> offset) & 0x0001) != 0;
     }
 
-    fn has_even_number_bits(data: u8) bool {
+    fn hasEvenNumberOfBits(data: u8) bool {
         return @popCount(u8, data) % 2 == 0;
     }
 
     /// Check 11-bit word has 1 start bit, 1 stop bit and an odd parity bit.
-    fn check_word(word: u16) !u8 {
-        if (get_bit(word, 0)) return error.BadStartBit;
-        if (!get_bit(word, 10)) return error.BadStopBit;
+    fn checkWord(word: u16) !u8 {
+        if (getBit(word, 0)) return error.BadStartBit;
+        if (!getBit(word, 10)) return error.BadStopBit;
 
         const data = @truncate(u8, (word >> 1));
 
         // Needs odd parity
-        if (has_even_number_bits(data) != get_bit(word, 9)) {
+        if (hasEvenNumberOfBits(data) != getBit(word, 9)) {
             return error.ParityError;
         }
 
@@ -325,16 +325,16 @@ pub const Modifiers = struct {
     capslock: bool = false,
     alt_gr: bool = false,
 
-    pub inline fn is_shifted(modifiers: Modifiers) bool {
+    pub inline fn isShifted(modifiers: Modifiers) bool {
         return modifiers.lshift or modifiers.rshift;
     }
 
-    pub inline fn is_ctrl(modifiers: Modifiers) bool {
+    pub inline fn isCtrl(modifiers: Modifiers) bool {
         return modifiers.lctrl or modifiers.rctrl;
     }
 
-    pub inline fn is_caps(modifiers: Modifiers) bool {
-        return modifiers.is_shifted() != modifiers.capslock;
+    pub inline fn isCaps(modifiers: Modifiers) bool {
+        return modifiers.isShifted() != modifiers.capslock;
     }
 
     test "" {
@@ -369,20 +369,20 @@ test "f9" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
     // start
-    std.testing.expect((try keyboard.add_bit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
     // 8 data bits (LSB first)
-    std.testing.expect((try keyboard.add_bit(1)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
-    std.testing.expect((try keyboard.add_bit(0)) == null);
+    std.testing.expect((try keyboard.addBit(1)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
     // parity
-    std.testing.expect((try keyboard.add_bit(0)) == null);
+    std.testing.expect((try keyboard.addBit(0)) == null);
     // stop
-    const result = try keyboard.add_bit(1);
+    const result = try keyboard.addBit(1);
     std.testing.expect(result != null);
     std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
 }
@@ -390,7 +390,7 @@ test "f9" {
 test "f9 word" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
-    const result = try keyboard.add_word(0x0402);
+    const result = try keyboard.addWord(0x0402);
     std.testing.expect(result != null);
     std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
 }
@@ -398,7 +398,7 @@ test "f9 word" {
 test "f9 byte" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
-    const result = try keyboard.add_byte(0x01);
+    const result = try keyboard.addByte(0x01);
     std.testing.expect(result != null);
     std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
 }
@@ -406,18 +406,18 @@ test "f9 byte" {
 test "keyup keydown" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
-    var kv = try keyboard.add_byte(0x01);
+    var kv = try keyboard.addByte(0x01);
     std.testing.expect(kv != null);
     std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, kv.?);
 
-    kv = try keyboard.add_byte(0x01);
+    kv = try keyboard.addByte(0x01);
     std.testing.expect(kv != null);
     std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, kv.?);
 
-    kv = try keyboard.add_byte(0xF0);
+    kv = try keyboard.addByte(0xF0);
     std.testing.expect(kv == null);
 
-    kv = try keyboard.add_byte(0x01);
+    kv = try keyboard.addByte(0x01);
     std.testing.expect(kv != null);
     std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Up }, kv.?);
 }
@@ -426,53 +426,53 @@ test "shift" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
     // A with shift held
-    var dk = keyboard.process_keyevent(KeyEvent{ .code = .ShiftLeft, .state = .Down });
+    var dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftLeft, .state = .Down });
     std.testing.expect(dk == null);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
     std.testing.expect(dk != null);
     std.testing.expectEqualStrings("A", dk.?.Unicode);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
     std.testing.expect(dk == null);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .ShiftLeft, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftLeft, .state = .Up });
     std.testing.expect(dk == null);
 
     // A with no shift
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
     std.testing.expect(dk != null);
     std.testing.expectEqualStrings("a", dk.?.Unicode);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
     std.testing.expect(dk == null);
 
     // A with right shift held
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .ShiftRight, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftRight, .state = .Down });
     std.testing.expect(dk == null);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
     std.testing.expect(dk != null);
     std.testing.expectEqualStrings("A", dk.?.Unicode);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
     std.testing.expect(dk == null);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .ShiftRight, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftRight, .state = .Up });
     std.testing.expect(dk == null);
 
     // Caps lock on
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .CapsLock, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .CapsLock, .state = .Down });
     std.testing.expect(dk == null);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .CapsLock, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .CapsLock, .state = .Up });
     std.testing.expect(dk == null);
 
     // Letters are now caps
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
     std.testing.expect(dk != null);
     std.testing.expectEqualStrings("A", dk.?.Unicode);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
     std.testing.expect(dk == null);
 
     // Unless you press shift
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .ShiftLeft, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftLeft, .state = .Down });
     std.testing.expect(dk == null);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Down });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
     std.testing.expect(dk != null);
     std.testing.expectEqualStrings("a", dk.?.Unicode);
-    dk = keyboard.process_keyevent(KeyEvent{ .code = .A, .state = .Up });
+    dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
     std.testing.expect(dk == null);
 }

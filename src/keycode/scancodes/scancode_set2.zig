@@ -23,27 +23,27 @@ pub const KEY_RELEASE_CODE: u8 = 0xF0;
 ///
 /// Release Extended:
 /// xxx => Extended Key Up
-pub fn advance_state(state: *DecodeState, code: u8) KeyboardError!?KeyEvent {
+pub fn advanceState(state: *DecodeState, code: u8) KeyboardError!?KeyEvent {
     switch (state.*) {
         .Start => switch (code) {
             EXTENDED_KEY_CODE => state.* = .Extended,
             KEY_RELEASE_CODE => state.* = .Release,
-            else => return KeyEvent{ .code = try map_scancode(code), .state = .Down },
+            else => return KeyEvent{ .code = try mapScancode(code), .state = .Down },
         },
         .Extended => switch (code) {
             KEY_RELEASE_CODE => state.* = .ExtendedRelease,
             else => {
                 state.* = .Start;
-                return KeyEvent{ .code = try map_extended_scancode(code), .state = .Down };
+                return KeyEvent{ .code = try mapExtendedScancode(code), .state = .Down };
             },
         },
         .Release => {
             state.* = .Start;
-            return KeyEvent{ .code = try map_scancode(code), .state = .Up };
+            return KeyEvent{ .code = try mapScancode(code), .state = .Up };
         },
         .ExtendedRelease => {
             state.* = .Start;
-            return KeyEvent{ .code = try map_extended_scancode(code), .state = .Up };
+            return KeyEvent{ .code = try mapExtendedScancode(code), .state = .Up };
         },
     }
 
@@ -51,7 +51,7 @@ pub fn advance_state(state: *DecodeState, code: u8) KeyboardError!?KeyEvent {
 }
 
 /// Implements the single byte codes for Set 2.
-fn map_scancode(code: u8) KeyboardError!KeyCode {
+fn mapScancode(code: u8) KeyboardError!KeyCode {
     return switch (code) {
         0x01 => .F9,
         0x03 => .F5,
@@ -145,7 +145,7 @@ fn map_scancode(code: u8) KeyboardError!KeyCode {
 }
 
 /// Implements the extended byte codes for set 1 (prefixed with E0)
-fn map_extended_scancode(code: u8) KeyboardError!KeyCode {
+fn mapExtendedScancode(code: u8) KeyboardError!KeyCode {
     return switch (code) {
         0x11 => .AltRight,
         0x14 => .ControlRight,

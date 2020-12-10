@@ -5,10 +5,10 @@ usingnamespace @import("../../pc_keyboard.zig");
 
 const us104 = @import("us104.zig");
 
-pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
+pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
     switch (keycode) {
         .BackTick => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "`" };
             } else {
                 return .{ .Unicode = "@" };
@@ -16,76 +16,76 @@ pub fn map_keycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCo
         },
         .Escape => return DecodedKey{ .Unicode = "\x1B" },
         .Key2 => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "\"" };
             } else {
                 return .{ .Unicode = "2" };
             }
         },
         .Key6 => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "&" };
             } else {
                 return .{ .Unicode = "6" };
             }
         },
         .Key7 => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "'" };
             } else {
                 return .{ .Unicode = "7" };
             }
         },
         .Key8 => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "(" };
             } else {
                 return .{ .Unicode = "8" };
             }
         },
         .Key9 => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = ")" };
             } else {
                 return .{ .Unicode = "9" };
             }
         },
         .Key0 => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = " " };
             } else {
                 return .{ .Unicode = "0" };
             }
         },
         .Minus => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "=" };
             } else {
                 return .{ .Unicode = "-" };
             }
         },
         .Equals => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "+" };
             } else {
                 return .{ .Unicode = ";" };
             }
         },
         .SemiColon => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "*" };
             } else {
                 return .{ .Unicode = ":" };
             }
         },
         .Quote => {
-            if (modifiers.is_shifted()) {
+            if (modifiers.isShifted()) {
                 return .{ .Unicode = "~" };
             } else {
                 return .{ .Unicode = "^" };
             }
         },
-        else => return us104.map_keycode(keycode, modifiers, handle_ctrl),
+        else => return us104.mapKeycode(keycode, modifiers, handle_ctrl),
     }
 }
 
