@@ -325,15 +325,15 @@ pub const Modifiers = struct {
     capslock: bool = false,
     alt_gr: bool = false,
 
-    pub inline fn isShifted(modifiers: Modifiers) bool {
+    pub fn isShifted(modifiers: Modifiers) callconv(.Inline) bool {
         return modifiers.lshift or modifiers.rshift;
     }
 
-    pub inline fn isCtrl(modifiers: Modifiers) bool {
+    pub fn isCtrl(modifiers: Modifiers) callconv(.Inline) bool {
         return modifiers.lctrl or modifiers.rctrl;
     }
 
-    pub inline fn isCaps(modifiers: Modifiers) bool {
+    pub fn isCaps(modifiers: Modifiers) callconv(.Inline) bool {
         return modifiers.isShifted() != modifiers.capslock;
     }
 
