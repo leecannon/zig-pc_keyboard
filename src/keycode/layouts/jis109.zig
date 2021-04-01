@@ -89,6 +89,6 @@ pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCon
     }
 }
 
-test "" {
+comptime {
     @import("std").testing.refAllDecls(@This());
 }

@@ -168,7 +168,7 @@ pub const Keyboard = struct {
         return data;
     }
 
-    test "" {
+    comptime {
         std.testing.refAllDecls(@This());
     }
 };
@@ -337,7 +337,7 @@ pub const Modifiers = struct {
         return modifiers.isShifted() != modifiers.capslock;
     }
 
-    test "" {
+    comptime {
         std.testing.refAllDecls(@This());
     }
 };
@@ -361,7 +361,7 @@ pub const DecodeState = enum {
 
 const KEYCODE_BITS: u8 = 11;
 
-test "" {
+comptime {
     std.testing.refAllDecls(@This());
 }
 

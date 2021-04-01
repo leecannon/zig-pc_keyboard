@@ -168,6 +168,6 @@ fn mapExtendedScancode(code: u8) KeyboardError!KeyCode {
     };
 }
 
-test "" {
+comptime {
     @import("std").testing.refAllDecls(@This());
 }
