@@ -325,15 +325,15 @@ pub const Modifiers = struct {
     capslock: bool = false,
     alt_gr: bool = false,
 
-    pub fn isShifted(modifiers: Modifiers) callconv(.Inline) bool {
+    pub inline fn isShifted(modifiers: Modifiers) bool {
         return modifiers.lshift or modifiers.rshift;
     }
 
-    pub fn isCtrl(modifiers: Modifiers) callconv(.Inline) bool {
+    pub inline fn isCtrl(modifiers: Modifiers) bool {
         return modifiers.lctrl or modifiers.rctrl;
     }
 
-    pub fn isCaps(modifiers: Modifiers) callconv(.Inline) bool {
+    pub inline fn isCaps(modifiers: Modifiers) bool {
         return modifiers.isShifted() != modifiers.capslock;
     }
 
@@ -369,57 +369,57 @@ test "f9" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
     // start
-    std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
     // 8 data bits (LSB first)
-    std.testing.expect((try keyboard.addBit(1)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
-    std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(1)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
     // parity
-    std.testing.expect((try keyboard.addBit(0)) == null);
+    try std.testing.expect((try keyboard.addBit(0)) == null);
     // stop
     const result = try keyboard.addBit(1);
-    std.testing.expect(result != null);
-    std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
+    try std.testing.expect(result != null);
+    try std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
 }
 
 test "f9 word" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
     const result = try keyboard.addWord(0x0402);
-    std.testing.expect(result != null);
-    std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
+    try std.testing.expect(result != null);
+    try std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
 }
 
 test "f9 byte" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
     const result = try keyboard.addByte(0x01);
-    std.testing.expect(result != null);
-    std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
+    try std.testing.expect(result != null);
+    try std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, result.?);
 }
 
 test "keyup keydown" {
     var keyboard = Keyboard.init(.ScancodeSet2, .Us104Key, .MapLettersToUnicode);
 
     var kv = try keyboard.addByte(0x01);
-    std.testing.expect(kv != null);
-    std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, kv.?);
+    try std.testing.expect(kv != null);
+    try std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, kv.?);
 
     kv = try keyboard.addByte(0x01);
-    std.testing.expect(kv != null);
-    std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, kv.?);
+    try std.testing.expect(kv != null);
+    try std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Down }, kv.?);
 
     kv = try keyboard.addByte(0xF0);
-    std.testing.expect(kv == null);
+    try std.testing.expect(kv == null);
 
     kv = try keyboard.addByte(0x01);
-    std.testing.expect(kv != null);
-    std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Up }, kv.?);
+    try std.testing.expect(kv != null);
+    try std.testing.expectEqual(KeyEvent{ .code = .F9, .state = .Up }, kv.?);
 }
 
 test "shift" {
@@ -427,52 +427,52 @@ test "shift" {
 
     // A with shift held
     var dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftLeft, .state = .Down });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
-    std.testing.expect(dk != null);
-    std.testing.expectEqualStrings("A", dk.?.Unicode);
+    try std.testing.expect(dk != null);
+    try std.testing.expectEqualStrings("A", dk.?.Unicode);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftLeft, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
 
     // A with no shift
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
-    std.testing.expect(dk != null);
-    std.testing.expectEqualStrings("a", dk.?.Unicode);
+    try std.testing.expect(dk != null);
+    try std.testing.expectEqualStrings("a", dk.?.Unicode);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
 
     // A with right shift held
     dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftRight, .state = .Down });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
-    std.testing.expect(dk != null);
-    std.testing.expectEqualStrings("A", dk.?.Unicode);
+    try std.testing.expect(dk != null);
+    try std.testing.expectEqualStrings("A", dk.?.Unicode);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftRight, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
 
     // Caps lock on
     dk = keyboard.processKeyevent(KeyEvent{ .code = .CapsLock, .state = .Down });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .CapsLock, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
 
     // Letters are now caps
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
-    std.testing.expect(dk != null);
-    std.testing.expectEqualStrings("A", dk.?.Unicode);
+    try std.testing.expect(dk != null);
+    try std.testing.expectEqualStrings("A", dk.?.Unicode);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
 
     // Unless you press shift
     dk = keyboard.processKeyevent(KeyEvent{ .code = .ShiftLeft, .state = .Down });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Down });
-    std.testing.expect(dk != null);
-    std.testing.expectEqualStrings("a", dk.?.Unicode);
+    try std.testing.expect(dk != null);
+    try std.testing.expectEqualStrings("a", dk.?.Unicode);
     dk = keyboard.processKeyevent(KeyEvent{ .code = .A, .state = .Up });
-    std.testing.expect(dk == null);
+    try std.testing.expect(dk == null);
 }
