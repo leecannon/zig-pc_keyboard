@@ -1,11 +1,11 @@
 //! A standard Japan 106-key (or 109-key including Windows keys) keyboard.
 //! Has a 2-row high Enter key, with Backslash above.
 
-usingnamespace @import("../../pc_keyboard.zig");
+const pc_keyboard = @import("../../pc_keyboard.zig");
 
 const us104 = @import("us104.zig");
 
-pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
+pub fn mapKeycode(keycode: pc_keyboard.KeyCode, modifiers: pc_keyboard.Modifiers, handle_ctrl: pc_keyboard.HandleControl) pc_keyboard.DecodedKey {
     switch (keycode) {
         .BackTick => {
             if (modifiers.isShifted()) {
@@ -14,7 +14,7 @@ pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCon
                 return .{ .Unicode = "@" };
             }
         },
-        .Escape => return DecodedKey{ .Unicode = "\x1B" },
+        .Escape => return pc_keyboard.DecodedKey{ .Unicode = "\x1B" },
         .Key2 => {
             if (modifiers.isShifted()) {
                 return .{ .Unicode = "\"" };

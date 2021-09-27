@@ -1,11 +1,11 @@
 //! A standard United Kingdom 102-key (or 105-key including Windows keys) keyboard.
 //! Has a 2-row high Enter key, with Backslash next to the left shift.
 
-usingnamespace @import("../../pc_keyboard.zig");
+const pc_keyboard = @import("../../pc_keyboard.zig");
 
 const us104 = @import("us104.zig");
 
-pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
+pub fn mapKeycode(keycode: pc_keyboard.KeyCode, modifiers: pc_keyboard.Modifiers, handle_ctrl: pc_keyboard.HandleControl) pc_keyboard.DecodedKey {
     switch (keycode) {
         .BackTick => {
             if (modifiers.alt_gr) {

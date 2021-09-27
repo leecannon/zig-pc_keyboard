@@ -2,31 +2,22 @@
 
 A zig reimplementation of the [pc-keyboard](https://github.com/rust-embedded-community/pc-keyboard) rust crate
 
-## How to use
+## How to get
 
-Download the repo somehow then either:
+### Gyro
 
-### Use a package manager
+`gyro add leecannon/pc_keyboard`
 
-* [zigmod](https://github.com/nektro/zigmod)
-* [zkg](https://github.com/mattnite/zkg)
+### Zigmod
 
-### Add as package in `build.zig`
+`gyro add leecannon/pc_keyboard`
 
-* To `build.zig` add:
-  
-   ```zig
-   exe.addPackagePath("pc_keyboard", "zig-pc_keyboard/src/pc_keyboard.zig"); // or whatever the path is
-   ```
-* Then the package is available within any zig file:
-  
-   ```zig
-   const pc_keyboard = @import("pc_keyboard");
-   ```
+### Git
 
-### Import directly
+#### Submodule
 
-In any zig file add:
-```zig
-const pc_keyboard = @import("../zig-pc_keyboard/src/pc_keyboard.zig"); // or whatever the path is from *that* file
-```
+`git submodule add https://github.com/leecannon/zig-pc_keyboard zig-pc_keyboard`
+
+#### Clone
+
+`git clone https://github.com/leecannon/zig-pc_keyboard`

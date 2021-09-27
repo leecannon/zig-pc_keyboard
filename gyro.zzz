@@ -1,0 +1,16 @@
+pkgs:
+  pc_keyboard:
+    version: 0.1.0
+    description: "PS/2 Keyboard Decoder"
+    license: MIT
+    source_url: "https://github.com/leecannon/zig-pc_keyboard"
+    tags:
+      osdev
+
+    root: src/pc_keyboard.zig
+    files:
+      README.md
+      LICENSE
+      src/*.zig
+      src/keycode/layouts/*.zig
+      src/keycode/scancodes/*.zig

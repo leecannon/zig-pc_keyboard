@@ -1,11 +1,11 @@
 //! A standard United Kingdom 102-key (or 105-key including Windows keys) keyboard.
 //! Has a 2-row high Enter key, with Backslash next to the left shift.
 
-usingnamespace @import("../../pc_keyboard.zig");
+const pc_keyboard = @import("../../pc_keyboard.zig");
 
 const us104 = @import("us104.zig");
 
-pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleControl) DecodedKey {
+pub fn mapKeycode(keycode: pc_keyboard.KeyCode, modifiers: pc_keyboard.Modifiers, handle_ctrl: pc_keyboard.HandleControl) pc_keyboard.DecodedKey {
     const map_to_unicode = handle_ctrl == .MapLettersToUnicode;
     switch (keycode) {
         .Minus => {
@@ -45,65 +45,65 @@ pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCon
         },
         .R => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0010}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0010}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "P" };
+                return pc_keyboard.DecodedKey{ .Unicode = "P" };
             } else {
-                return DecodedKey{ .Unicode = "p" };
+                return pc_keyboard.DecodedKey{ .Unicode = "p" };
             }
         },
         .T => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0019}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0019}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "Y" };
+                return pc_keyboard.DecodedKey{ .Unicode = "Y" };
             } else {
-                return DecodedKey{ .Unicode = "y" };
+                return pc_keyboard.DecodedKey{ .Unicode = "y" };
             }
         },
         .Y => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0006}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0006}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "F" };
+                return pc_keyboard.DecodedKey{ .Unicode = "F" };
             } else {
-                return DecodedKey{ .Unicode = "f" };
+                return pc_keyboard.DecodedKey{ .Unicode = "f" };
             }
         },
         .U => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0007}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0007}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "G" };
+                return pc_keyboard.DecodedKey{ .Unicode = "G" };
             } else {
-                return DecodedKey{ .Unicode = "g" };
+                return pc_keyboard.DecodedKey{ .Unicode = "g" };
             }
         },
         .I => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0003}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0003}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "C" };
+                return pc_keyboard.DecodedKey{ .Unicode = "C" };
             } else {
-                return DecodedKey{ .Unicode = "c" };
+                return pc_keyboard.DecodedKey{ .Unicode = "c" };
             }
         },
         .O => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0012}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0012}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "R" };
+                return pc_keyboard.DecodedKey{ .Unicode = "R" };
             } else {
-                return DecodedKey{ .Unicode = "r" };
+                return pc_keyboard.DecodedKey{ .Unicode = "r" };
             }
         },
         .P => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{000C}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{000C}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "L" };
+                return pc_keyboard.DecodedKey{ .Unicode = "L" };
             } else {
-                return DecodedKey{ .Unicode = "l" };
+                return pc_keyboard.DecodedKey{ .Unicode = "l" };
             }
         },
         .BracketSquareLeft => {
@@ -122,83 +122,83 @@ pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCon
         },
         .S => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{000F}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{000F}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "O" };
+                return pc_keyboard.DecodedKey{ .Unicode = "O" };
             } else {
-                return DecodedKey{ .Unicode = "o" };
+                return pc_keyboard.DecodedKey{ .Unicode = "o" };
             }
         },
         .D => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0005}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0005}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "E" };
+                return pc_keyboard.DecodedKey{ .Unicode = "E" };
             } else {
-                return DecodedKey{ .Unicode = "e" };
+                return pc_keyboard.DecodedKey{ .Unicode = "e" };
             }
         },
         .F => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0015}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0015}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "U" };
+                return pc_keyboard.DecodedKey{ .Unicode = "U" };
             } else {
-                return DecodedKey{ .Unicode = "u" };
+                return pc_keyboard.DecodedKey{ .Unicode = "u" };
             }
         },
         .G => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0009}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0009}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "I" };
+                return pc_keyboard.DecodedKey{ .Unicode = "I" };
             } else {
-                return DecodedKey{ .Unicode = "i" };
+                return pc_keyboard.DecodedKey{ .Unicode = "i" };
             }
         },
         .H => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0004}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0004}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "D" };
+                return pc_keyboard.DecodedKey{ .Unicode = "D" };
             } else {
-                return DecodedKey{ .Unicode = "d" };
+                return pc_keyboard.DecodedKey{ .Unicode = "d" };
             }
         },
         .J => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0008}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0008}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "H" };
+                return pc_keyboard.DecodedKey{ .Unicode = "H" };
             } else {
-                return DecodedKey{ .Unicode = "h" };
+                return pc_keyboard.DecodedKey{ .Unicode = "h" };
             }
         },
         .K => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0014}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0014}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "T" };
+                return pc_keyboard.DecodedKey{ .Unicode = "T" };
             } else {
-                return DecodedKey{ .Unicode = "t" };
+                return pc_keyboard.DecodedKey{ .Unicode = "t" };
             }
         },
         .L => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{000E}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{000E}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "N" };
+                return pc_keyboard.DecodedKey{ .Unicode = "N" };
             } else {
-                return DecodedKey{ .Unicode = "n" };
+                return pc_keyboard.DecodedKey{ .Unicode = "n" };
             }
         },
         .SemiColon => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0013}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0013}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "S" };
+                return pc_keyboard.DecodedKey{ .Unicode = "S" };
             } else {
-                return DecodedKey{ .Unicode = "s" };
+                return pc_keyboard.DecodedKey{ .Unicode = "s" };
             }
         },
         .Quote => {
@@ -217,74 +217,74 @@ pub fn mapKeycode(keycode: KeyCode, modifiers: Modifiers, handle_ctrl: HandleCon
         },
         .X => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0011}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0011}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "Q" };
+                return pc_keyboard.DecodedKey{ .Unicode = "Q" };
             } else {
-                return DecodedKey{ .Unicode = "q" };
+                return pc_keyboard.DecodedKey{ .Unicode = "q" };
             }
         },
         .C => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{000A}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{000A}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "J" };
+                return pc_keyboard.DecodedKey{ .Unicode = "J" };
             } else {
-                return DecodedKey{ .Unicode = "j" };
+                return pc_keyboard.DecodedKey{ .Unicode = "j" };
             }
         },
         .V => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{000B}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{000B}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "K" };
+                return pc_keyboard.DecodedKey{ .Unicode = "K" };
             } else {
-                return DecodedKey{ .Unicode = "k" };
+                return pc_keyboard.DecodedKey{ .Unicode = "k" };
             }
         },
         .B => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0018}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0018}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "X" };
+                return pc_keyboard.DecodedKey{ .Unicode = "X" };
             } else {
-                return DecodedKey{ .Unicode = "x" };
+                return pc_keyboard.DecodedKey{ .Unicode = "x" };
             }
         },
         .N => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0002}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0002}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "B" };
+                return pc_keyboard.DecodedKey{ .Unicode = "B" };
             } else {
-                return DecodedKey{ .Unicode = "b" };
+                return pc_keyboard.DecodedKey{ .Unicode = "b" };
             }
         },
         .Comma => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0017}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0017}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "W" };
+                return pc_keyboard.DecodedKey{ .Unicode = "W" };
             } else {
-                return DecodedKey{ .Unicode = "w" };
+                return pc_keyboard.DecodedKey{ .Unicode = "w" };
             }
         },
         .Fullstop => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{0016}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{0016}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "V" };
+                return pc_keyboard.DecodedKey{ .Unicode = "V" };
             } else {
-                return DecodedKey{ .Unicode = "v" };
+                return pc_keyboard.DecodedKey{ .Unicode = "v" };
             }
         },
         .Slash => {
             if (map_to_unicode and modifiers.isCtrl()) {
-                return DecodedKey{ .Unicode = "\u{001A}" };
+                return pc_keyboard.DecodedKey{ .Unicode = "\u{001A}" };
             } else if (modifiers.isCaps()) {
-                return DecodedKey{ .Unicode = "Z" };
+                return pc_keyboard.DecodedKey{ .Unicode = "Z" };
             } else {
-                return DecodedKey{ .Unicode = "z" };
+                return pc_keyboard.DecodedKey{ .Unicode = "z" };
             }
         },
         else => return us104.mapKeycode(keycode, modifiers, handle_ctrl),

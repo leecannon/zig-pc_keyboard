@@ -2,7 +2,7 @@
 //! See the OS dev wiki: https://wiki.osdev.org/PS/2_Keyboard#Scan_Code_Set_2
 
 const std = @import("std");
-usingnamespace @import("../../pc_keyboard.zig");
+const pc_keyboard = @import("../../pc_keyboard.zig");
 
 pub const EXTENDED_KEY_CODE: u8 = 0xE0;
 pub const KEY_RELEASE_CODE: u8 = 0xF0;
@@ -23,27 +23,27 @@ pub const KEY_RELEASE_CODE: u8 = 0xF0;
 ///
 /// Release Extended:
 /// xxx => Extended Key Up
-pub fn advanceState(state: *DecodeState, code: u8) KeyboardError!?KeyEvent {
+pub fn advanceState(state: *pc_keyboard.DecodeState, code: u8) pc_keyboard.KeyboardError!?pc_keyboard.KeyEvent {
     switch (state.*) {
         .Start => switch (code) {
             EXTENDED_KEY_CODE => state.* = .Extended,
             KEY_RELEASE_CODE => state.* = .Release,
-            else => return KeyEvent{ .code = try mapScancode(code), .state = .Down },
+            else => return pc_keyboard.KeyEvent{ .code = try mapScancode(code), .state = .Down },
         },
         .Extended => switch (code) {
             KEY_RELEASE_CODE => state.* = .ExtendedRelease,
             else => {
                 state.* = .Start;
-                return KeyEvent{ .code = try mapExtendedScancode(code), .state = .Down };
+                return pc_keyboard.KeyEvent{ .code = try mapExtendedScancode(code), .state = .Down };
             },
         },
         .Release => {
             state.* = .Start;
-            return KeyEvent{ .code = try mapScancode(code), .state = .Up };
+            return pc_keyboard.KeyEvent{ .code = try mapScancode(code), .state = .Up };
         },
         .ExtendedRelease => {
             state.* = .Start;
-            return KeyEvent{ .code = try mapExtendedScancode(code), .state = .Up };
+            return pc_keyboard.KeyEvent{ .code = try mapExtendedScancode(code), .state = .Up };
         },
     }
 
@@ -51,7 +51,7 @@ pub fn advanceState(state: *DecodeState, code: u8) KeyboardError!?KeyEvent {
 }
 
 /// Implements the single byte codes for Set 2.
-fn mapScancode(code: u8) KeyboardError!KeyCode {
+fn mapScancode(code: u8) pc_keyboard.KeyboardError!pc_keyboard.KeyCode {
     return switch (code) {
         0x01 => .F9,
         0x03 => .F5,
@@ -140,12 +140,12 @@ fn mapScancode(code: u8) KeyboardError!KeyCode {
         0x7E => .ScrollLock,
         0x83 => .F7,
         0xAA => .PowerOnTestOk,
-        else => KeyboardError.UnknownKeyCode,
+        else => pc_keyboard.KeyboardError.UnknownKeyCode,
     };
 }
 
 /// Implements the extended byte codes for set 1 (prefixed with E0)
-fn mapExtendedScancode(code: u8) KeyboardError!KeyCode {
+fn mapExtendedScancode(code: u8) pc_keyboard.KeyboardError!pc_keyboard.KeyCode {
     return switch (code) {
         0x11 => .AltRight,
         0x14 => .ControlRight,
@@ -164,7 +164,7 @@ fn mapExtendedScancode(code: u8) KeyboardError!KeyCode {
         0x75 => .ArrowUp,
         0x7A => .PageDown,
         0x7D => .PageUp,
-        else => KeyboardError.UnknownKeyCode,
+        else => pc_keyboard.KeyboardError.UnknownKeyCode,
     };
 }
 
