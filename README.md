@@ -10,7 +10,7 @@ A zig reimplementation of the [pc-keyboard](https://github.com/rust-embedded-com
 
 ### Zigmod
 
-`gyro add leecannon/pc_keyboard`
+`zigmod aq add 1/leecannon/pc_keyboard`
 
 ### Git
 
